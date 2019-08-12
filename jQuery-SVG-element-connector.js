@@ -1,5 +1,8 @@
-// the semi-colon before function invocation is a safety net against concatenated
-// scripts and/or other plugins which may not be closed properly.
+/*!
+  jQuery jQuery SVG element connector v0.1
+  license: MIT
+  source: https://github.com/detrin/jQuery-SVG-element-connector
+*/
 ;( function( $, window, document, undefined ) {
 
 	"use strict";
@@ -45,12 +48,34 @@
 				// call them like the example below
 				this.yourOtherFunction( "jQuery Boilerplate" );
 			},
+
 			yourOtherFunction: function( text ) {
 
 				// some logic
 				$( this.element ).text( text );
-			}
-		} );
+			},
+		
+			// https://remysharp.com/2010/07/21/throttling-function-calls
+			throttle: function (fn, threshhold, scope) {
+				threshhold || (threshhold = 250);
+				var last, deferTimer;
+				return function () {
+					var context = scope || this;
+					var now = +new Date,
+					args = arguments;
+					if (last && now < last + threshhold) {
+					clearTimeout(deferTimer);
+					deferTimer = setTimeout(function () {
+						last = now;
+						fn.apply(context, args);
+					}, threshhold);
+					} else {
+					last = now;
+					fn.apply(context, args);
+					}
+				};
+			},
+			});
 
 		// A really lightweight plugin wrapper around the constructor,
 		// preventing against multiple instantiations
